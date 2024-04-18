@@ -26,8 +26,8 @@ export default function Header() {
         <AiOutlineSearch />
       </Button>
       <div className='flex gap-2 md:order-2'>
-        <Link to='/sign-in'>
-          <Button gradientDuoTone='purpleToBlue'>Sign In</Button>
+        <Link to='/sign-up'>
+          <Button outline gradientDuoTone='purpleToBlue'>Sign Up</Button>
         </Link>
         <Navbar.Toggle />
       </div>
