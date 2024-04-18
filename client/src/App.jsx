@@ -7,6 +7,7 @@ import Task from "./pages/Task";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import PrivateRoute from "./components/PrivateRoute";
+import About from "./pages/About";
 
 export default function App() {
   return (
@@ -18,8 +19,10 @@ export default function App() {
         <Route path="/sign-up" element={<SignUp />} />
         <Route element={<PrivateRoute />}>
           <Route path="/dashboard" element={<Dashboard />} />
+          
         </Route>
-        <Route path="/task" element={<Task />} />
+        {/* <Route path="/task" element={<Task />} /> */}
+        <Route path="/about" element={<About />}/>
       </Routes>
       <Footer />
     </BrowserRouter>
