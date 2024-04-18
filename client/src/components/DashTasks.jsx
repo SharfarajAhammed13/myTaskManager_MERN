@@ -1,15 +1,19 @@
 /* eslint-disable react/jsx-key */
 
-import { Table, Checkbox } from 'flowbite-react';
+import { Modal, Button, Table, Checkbox } from 'flowbite-react';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { HiOutlineExclamationCircle } from 'react-icons/hi';
+import { set } from 'mongoose';
 
 export default function DashTasks() {
   const { currentUser } = useSelector((state) => state.user);
   const [userTasks, setUserTasks] = useState([]);
   const [showMore, setShowMore] = useState(true);
   console.log(userTasks);
+  const [showModal, setShowModal] = useState(false);
+  const [taskIdToDelete, setTaskIdToDelete] = useState('');
 
   useEffect(() => {
     const fetchTasks = async () => {
@@ -69,6 +73,28 @@ export default function DashTasks() {
     setUserTasks(updatedTasks);
   };
 
+  const handleDeleteTask = async () => {
+    setShowModal(false);
+    try {
+      const res = await fetch(
+        `/api/task/deletetask/${taskIdToDelete}/${currentUser._id}`,
+        {
+          method: 'DELETE',
+        }
+      );
+      const data = await res.json();
+      if (!res.ok) {
+        console.log(data.message);
+      } else {
+        setUserTasks((prev) =>
+          prev.filter((task) => task._id !== taskIdToDelete)
+        );
+      }
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+
 
   return (
     <div className='table-auto w-full overflow-x-scroll md:mx-auto p-3 scrollbar scrollbar-track-slate-100 scrollbar-thumb-slate-300 dark:scrollbar-track-slate-700 dark:scrollbar-thumb-slate-500'>
@@ -112,7 +138,12 @@ export default function DashTasks() {
                   </Table.Cell>
                   <Table.Cell>{task.priority}</Table.Cell>
                   <Table.Cell>
-                    <span className='font-medium text-red-500 hover:underline cursor-pointer'>
+                    <span 
+                      onClick={() => {
+                        setShowModal(true);
+                        setTaskIdToDelete(task._id);
+                      }}
+                      className='font-medium text-red-500 hover:underline cursor-pointer'>
                       Delete
                     </span>
                   </Table.Cell>
@@ -140,6 +171,30 @@ export default function DashTasks() {
       ) : (
         <p>You have no Tasks yet!</p>
       )}
+      <Modal
+        show={showModal}
+        onClose={() => setShowModal(false)}
+        popup
+        size='md'
+      >
+        <Modal.Header />
+        <Modal.Body>
+          <div className='text-center'>
+            <HiOutlineExclamationCircle className='h-14 w-14 text-gray-400 dark:text-gray-200 mb-4 mx-auto' />
+            <h3 className='mb-5 text-lg text-gray-500 dark:text-gray-400'>
+              Are you sure you want to delete this post?
+            </h3>
+            <div className='flex justify-center gap-4'>
+              <Button color='failure' onClick={handleDeleteTask}>
+                Yes, I'm sure
+              </Button>
+              <Button color='gray' onClick={() => setShowModal(false)}>
+                No, cancel
+              </Button>
+            </div>
+          </div>
+        </Modal.Body>
+      </Modal>
     </div>
   );
 }
