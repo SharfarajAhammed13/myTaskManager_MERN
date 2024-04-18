@@ -23,7 +23,7 @@ export default function Dashboard() {
       {/* profile... */}
       {tab === 'profile' && <DashProfile />}
       {/* Tasks */}
-      {tab === 'posts' && <DashTasks />}
+      {tab === 'tasks' && <DashTasks />}
     </div>
   );
 }

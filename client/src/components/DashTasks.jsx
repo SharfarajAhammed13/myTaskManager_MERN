@@ -1,11 +1,9 @@
 /* eslint-disable react/jsx-key */
-
-import { Modal, Button, Table, Checkbox } from 'flowbite-react';
+import { Modal, Button, Table} from 'flowbite-react';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { HiOutlineExclamationCircle } from 'react-icons/hi';
-import { set } from 'mongoose';
 
 export default function DashTasks() {
   const { currentUser } = useSelector((state) => state.user);
@@ -54,25 +52,6 @@ export default function DashTasks() {
   };
 
 
-  const handleCheckboxChange = (taskId) => {
-    const updatedTasks = userTasks.map((task) => {
-      if (userTasks.id === taskId) {
-        return { ...task, completed: !task.completed };
-      }
-      return task;
-    });
-    setUserTasks(updatedTasks);
-  };
-
-  const handleSelectAllChange = () => {
-    const allTasksCompleted = userTasks.every((task) => task.completed);
-    const updatedTasks = userTasks.map((task) => ({
-      ...task,
-      completed: !allTasksCompleted,
-    }));
-    setUserTasks(updatedTasks);
-  };
-
   const handleDeleteTask = async () => {
     setShowModal(false);
     try {
@@ -103,10 +82,6 @@ export default function DashTasks() {
           <Table hoverable className='shadow-md'>
             <Table.Head>
               <Table.HeadCell className="p-4">
-                <Checkbox 
-                  checked={userTasks.every((task) => task.completed)}
-                  onChange={handleSelectAllChange}
-                />
               </Table.HeadCell>
               <Table.HeadCell>Date Created</Table.HeadCell>
               <Table.HeadCell>Task Title</Table.HeadCell>
@@ -117,14 +92,8 @@ export default function DashTasks() {
               </Table.HeadCell>
             </Table.Head>
             {userTasks.map((task) => (
-              <Table.Body key={userTasks._id}className='divide-y'>
+              <Table.Body className='divide-y'>
                 <Table.Row className='bg-white'>
-                  <Table.Cell className="p-4">
-                    <Checkbox 
-                      checked={userTasks.completed}
-                      onChange={()=> handleCheckboxChange(userTasks._id)}
-                    />
-                  </Table.Cell>
                   <Table.Cell> 
                     {new Date(task.updatedAt).toLocaleDateString()}
                   </Table.Cell>
@@ -182,7 +151,7 @@ export default function DashTasks() {
           <div className='text-center'>
             <HiOutlineExclamationCircle className='h-14 w-14 text-gray-400 dark:text-gray-200 mb-4 mx-auto' />
             <h3 className='mb-5 text-lg text-gray-500 dark:text-gray-400'>
-              Are you sure you want to delete this post?
+              Are you sure you want to delete this task?
             </h3>
             <div className='flex justify-center gap-4'>
               <Button color='failure' onClick={handleDeleteTask}>

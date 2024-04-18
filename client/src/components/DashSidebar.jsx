@@ -53,9 +53,9 @@ export default function DashSidebar() {
             </Sidebar.Item>
           </Link>
           {currentUser.isAdmin && (
-            <Link to='/dashboard?tab=posts'>
+            <Link to='/dashboard?tab=tasks'>
               <Sidebar.Item
-                active={tab === 'posts'}
+                active={tab === 'tasks'}
                 icon={MdOutlineTaskAlt}
                 as='div'
               >

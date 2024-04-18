@@ -39,7 +39,7 @@ export const gettasks = async (req, res, next) => {
         ...(req.query.userId && { userId: req.query.userId }),
         ...(req.query.priority && { priority: req.query.category }),
         ...(req.query.slug && { slug: req.query.slug }),
-        ...(req.query.taskId && { _id: req.query.postId }),
+        ...(req.query.taskId && { _id: req.query.taskId }),
         ...(req.query.searchTerm && {
           $or: [
             { title: { $regex: req.query.searchTerm, $options: 'i' } },
@@ -77,11 +77,33 @@ export const gettasks = async (req, res, next) => {
 
   export const deletetask = async (req, res, next) => {
     if (!req.user.isAdmin || req.user.id !== req.params.userId) {
-      return next(errorHandler(403, 'You are not allowed to delete this post'));
+      return next(errorHandler(403, 'You are not allowed to delete this Task'));
     }
     try {
       await Task.findByIdAndDelete(req.params.taskId);
-      res.status(200).json('The post has been deleted');
+      res.status(200).json('The task has been deleted');
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  export const updatetask = async (req, res, next) => {
+    if (!req.user.isAdmin || req.user.id !== req.params.userId) {
+      return next(errorHandler(403, 'You are not allowed to update this task'));
+    }
+    try {
+      const updatedTask = await Task.findByIdAndUpdate(
+        req.params.taskId,
+        {
+          $set: {
+            title: req.body.title,
+            content: req.body.content,
+            priority: req.body.priority,
+          },
+        },
+        { new: true }
+      );
+      res.status(200).json(updatedTask);
     } catch (error) {
       next(error);
     }

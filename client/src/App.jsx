@@ -9,6 +9,7 @@ import PrivateRoute from "./components/PrivateRoute";
 import About from "./pages/About";
 import OnlyAdminPrivateRoute from './components/OnlyAdminPrivateRoute';
 import CreateTask from './pages/CreateTask';
+import UpdateTask from "./pages/UpdateTask";
 
 export default function App() {
   return (
@@ -24,7 +25,8 @@ export default function App() {
         </Route>
         {/* <Route path="/task" element={<Task />} /> */}
         <Route element={<OnlyAdminPrivateRoute />}>
-          <Route path='/create-post' element={<CreateTask />} />
+          <Route path='/create-task' element={<CreateTask />} />
+          <Route path='/update-task/:taskId' element={<UpdateTask />} />
         </Route>
         <Route path="/about" element={<About />}/>
       </Routes>
