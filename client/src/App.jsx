@@ -10,6 +10,7 @@ import About from "./pages/About";
 import OnlyAdminPrivateRoute from './components/OnlyAdminPrivateRoute';
 import CreateTask from './pages/CreateTask';
 import UpdateTask from "./pages/UpdateTask";
+import TaskPage from "./pages/TaskPage";
 
 export default function App() {
   return (
@@ -29,6 +30,7 @@ export default function App() {
           <Route path='/update-task/:taskId' element={<UpdateTask />} />
         </Route>
         <Route path="/about" element={<About />}/>
+        <Route path='/task/:taskSlug' element={<TaskPage />} />
       </Routes>
       <Footer />
     </BrowserRouter>
