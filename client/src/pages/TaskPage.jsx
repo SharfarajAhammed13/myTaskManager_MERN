@@ -3,12 +3,14 @@ import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import CallToAction from '../components/CallToAction';
 import CommentSection from '../components/CommentSection';
+import TaskCard from '../components/TaskCard';
 
 export default function TaskPage() {
   const { taskSlug } = useParams();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
   const [task, setTask] = useState(null);
+  const [recentTasks, setRecentTasks] = useState(null);
 
   useEffect(() => {
     const fetchTask = async () => {
@@ -33,6 +35,21 @@ export default function TaskPage() {
     };
     fetchTask();
   }, [taskSlug]);
+
+  useEffect(() => {
+    try {
+      const fetchRecentTasks = async () => {
+        const res = await fetch(`/api/task/gettasks?limit=3`);
+        const data = await res.json();
+        if (res.ok) {
+          setRecentTasks(data.Tasks);
+        }
+      };
+      fetchRecentTasks();
+    } catch (error) {
+      console.log(error.message);
+    }
+  }, []);
 
   if (loading)
     return (
@@ -68,5 +85,12 @@ export default function TaskPage() {
       <CallToAction/>
     </div>
       <CommentSection taskId={task._id} />
+      <div className='flex flex-col justify-center items-center mb-5'>
+        <h1 className='text-xl mt-5'>Recent articles</h1>
+        <div className='flex flex-wrap gap-5 mt-5 justify-center'>
+          {recentTasks &&
+            recentTasks.map((task) => <TaskCard key={task._id} task={task} />)}
+        </div>
+      </div>
     </main>
 }
