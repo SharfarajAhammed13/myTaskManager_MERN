@@ -4,6 +4,17 @@ This file is made in 2 folders: "client" & "api"
 
 "api" is for backend API logic and implemented necessary validation task for a "Task Manager App"
 
+FOR TESTING API IMPLEMENTATION
+SIGN UP: (POST) : localhost:3000/api/auth/signup
+SIGN IN: (POST) : localhost:3000/api/auth/signin
+GET ALL USERS: (GET) : localhost:3000/api/user/getusers
+DELETE USER: (DELETE) : localhost:3000/api/user/delete/USERID
+
+CREATE A TASK: (POST): localhost:3000/api/task/create
+GET ALL TASK: (GET): localhost:3000/api/task/gettasks
+
+Other requests are present please do check :)
+
 => Clone the repository: Start by cloning the repository to your local machine using the following command: 
 git clone <repository-url>
 
