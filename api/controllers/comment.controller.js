@@ -1,5 +1,14 @@
 import Comment from "../models/comment.model.js";
 
+/**
+ * Creates a new comment.
+ * 
+ * @param {Object} req - The request object.
+ * @param {Object} res - The response object.
+ * @param {Function} next - The next middleware function.
+ * @returns {Promise} - A promise that resolves to the created comment.
+ * @throws {Error} - If an error occurs while creating the comment.
+ */
 export const createComment = async (req, res, next) => {
   try {
     const { content, taskId, userId } = req.body;
@@ -23,6 +32,15 @@ export const createComment = async (req, res, next) => {
   }
 };
 
+
+/**
+ * Retrieves all comments for a specific task.
+ * @param {Object} req - The request object.
+ * @param {Object} res - The response object.
+ * @param {Function} next - The next middleware function.
+ * @returns {Promise<void>} - A promise that resolves when the comments are retrieved and sent as a response.
+ * @throws {Error} - If an error occurs while retrieving the comments.
+ */
 export const getTaskComments = async (req, res, next) => {
   try {
     const comments = await Comment.find({ taskId: req.params.taskId }).sort({

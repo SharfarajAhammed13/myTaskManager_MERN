@@ -1,21 +1,33 @@
 import Task from '../models/task.model.js';
 import { errorHandler } from '../utils/error.js';
 
+/**
+ * Creates a new task.
+ * 
+ * @param {Object} req - The request object.
+ * @param {Object} res - The response object.
+ * @param {Function} next - The next middleware function.
+ * @returns {Promise} - A promise that resolves to the created task.
+ */
 export const create = async (req, res, next) => {
+    // Check if user is an admin
     if (!req.user.isAdmin) {
         return next(errorHandler(403, 'You are not allowed to create a task'));
     }
 
+    // Check if all required fields are provided
     if (!req.body.title || !req.body.content) {
         return next(errorHandler(400, 'Please provide all required fields'));
     }
 
+    // Generate slug from title
     const slug = req.body.title
-    .split(' ')
-    .join('-')
-    .toLowerCase()
-    .replace(/[^a-zA-Z0-9-]/g, '');
+        .split(' ')
+        .join('-')
+        .toLowerCase()
+        .replace(/[^a-zA-Z0-9-]/g, '');
 
+    // Create a new task object
     const newTask = new Task({
         ...req.body,
         slug,
@@ -23,13 +35,23 @@ export const create = async (req, res, next) => {
     });
 
     try {
+        // Save the new task to the database
         const savedTask = await newTask.save();
         res.status(201).json(savedTask);
-      } catch (error) {
+    } catch (error) {
         next(error);
-      }
+    }
 }
 
+/**
+ * Retrieves tasks based on the provided query parameters.
+ * 
+ * @param {Object} req - The request object.
+ * @param {Object} res - The response object.
+ * @param {Function} next - The next middleware function.
+ * @returns {Promise<void>} - A promise that resolves when the tasks are retrieved and the response is sent.
+ * @throws {Error} - If an error occurs while retrieving the tasks.
+ */
 export const gettasks = async (req, res, next) => {
     try {
       const startIndex = parseInt(req.query.startIndex) || 0;
@@ -75,6 +97,14 @@ export const gettasks = async (req, res, next) => {
     }
   };
 
+  /**
+ * Deletes a task.
+ * 
+ * @param {Object} req - The request object.
+ * @param {Object} res - The response object.
+ * @param {Function} next - The next middleware function.
+ * @returns {Promise<void>} - A promise that resolves when the task is deleted.
+ */
   export const deletetask = async (req, res, next) => {
     if (!req.user.isAdmin || req.user.id !== req.params.userId) {
       return next(errorHandler(403, 'You are not allowed to delete this Task'));
@@ -87,6 +117,7 @@ export const gettasks = async (req, res, next) => {
     }
   };
 
+  // Updates the Task
   export const updatetask = async (req, res, next) => {
     if (!req.user.isAdmin || req.user.id !== req.params.userId) {
       return next(errorHandler(403, 'You are not allowed to update this task'));

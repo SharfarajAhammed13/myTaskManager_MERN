@@ -4,6 +4,8 @@ import User from '../models/user.model.js';
 export const test = (req, res) => {
   res.json({ message: 'API is working!' });
 };
+
+// Updates User
 export const updateUser = async (req, res, next) => {
   if (req.user.id !== req.params.userId) {
     return next(errorHandler(403, 'You are not allowed to update this user'));
@@ -52,6 +54,7 @@ try {
 }
 };
 
+// Deletes User Account
 export const deleteUser = async (req, res, next) => {
     if (!req.user.isAdmin && req.user.id !== req.params.userId) {
       return next(errorHandler(403, 'You are not allowed to delete this user'));
@@ -64,6 +67,7 @@ export const deleteUser = async (req, res, next) => {
     }
   };
 
+  // SignOut Function
   export const signout = (req, res, next) => {
     try {
       res
@@ -75,6 +79,7 @@ export const deleteUser = async (req, res, next) => {
     }
   };
 
+  // fetching User Details
   export const getUsers = async (req, res, next) => {
     if (!req.user.isAdmin) {
       return next(errorHandler(403, 'You are not allowed to see all users'));
@@ -117,7 +122,7 @@ export const deleteUser = async (req, res, next) => {
     }
   };
 
-
+//  fetch one user Detail
   export const getUser = async (req, res, next) => {
     try {
       const user = await User.findById(req.params.userId);

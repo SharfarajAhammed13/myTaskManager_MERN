@@ -3,9 +3,18 @@ import bcryptjs from 'bcryptjs';
 import { errorHandler } from '../utils/error.js';
 import jwt from 'jsonwebtoken';
 
+/**
+ * Handles the signup process for a new user.
+ * 
+ * @param {Object} req - The request object.
+ * @param {Object} res - The response object.
+ * @param {Function} next - The next middleware function.
+ * @returns {Promise} - A promise that resolves to a JSON response.
+ */
 export const signup = async (req, res, next) => {
   const { username, email, password } = req.body;
 
+  // Check if any required fields are missing or empty
   if (
     !username ||
     !email ||
@@ -14,11 +23,13 @@ export const signup = async (req, res, next) => {
     email === '' ||
     password === ''
   ) {
-    next(errorHandler(400,'All fields are required' ));
+    next(errorHandler(400, 'All fields are required'));
   }
 
+  // Hash the password
   const hashedPassword = bcryptjs.hashSync(password, 10);
 
+  // Create a new user object
   const newUser = new User({
     username,
     email,
@@ -26,6 +37,7 @@ export const signup = async (req, res, next) => {
   });
 
   try {
+    // Save the new user to the database
     await newUser.save();
     res.json('Signup successful');
   } catch (error) {
@@ -33,6 +45,14 @@ export const signup = async (req, res, next) => {
   }
 };
 
+/**
+ * Sign in a user.
+ * 
+ * @param {Object} req - The request object.
+ * @param {Object} res - The response object.
+ * @param {Function} next - The next middleware function.
+ * @returns {Promise<void>} - A promise that resolves when the sign in process is complete.
+ */
 export const signin = async (req, res, next) => {
   const { email, password} = req.body;
 
@@ -68,6 +88,14 @@ export const signin = async (req, res, next) => {
 
 }
 
+/**
+ * Handles Google authentication.
+ * 
+ * @param {Object} req - The request object.
+ * @param {Object} res - The response object.
+ * @param {Function} next - The next middleware function.
+ * @returns {Promise<void>} - A promise that resolves when the function is done.
+ */
 export const google = async (req, res, next) => {
   const { email, name, googlePhotoUrl } = req.body;
   try {

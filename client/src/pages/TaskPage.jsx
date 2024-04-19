@@ -69,11 +69,11 @@ export default function TaskPage() {
       {task && task.priority}
     </Button>
   </Link>
-  <img
+  {/* <img
     src={task && task.image}
     alt={task && task.title}
     className='mt-10 p-3 max-h-[600px] w-full object-cover'
-  />
+  /> */}
   <div className='flex justify-between p-3 border-b border-slate-500 mx-auto w-full max-w-2xl text-xs'>
         <span>{task && new Date(task.createdAt).toLocaleDateString()}</span>
         {/* <span className='italic'>{task && (task.content.length /1000).toFixed(0)} mins read</span> */}
