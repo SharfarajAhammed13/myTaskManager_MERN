@@ -1,6 +1,8 @@
 import { Button, Spinner } from 'flowbite-react';
 import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
+import CallToAction from '../components/CallToAction';
+import CommentSection from '../components/CommentSection';
 
 export default function TaskPage() {
   const { taskSlug } = useParams();
@@ -39,17 +41,32 @@ export default function TaskPage() {
       </div>
     );
   return <main className='p-3 flex flex-col max-w-6xl mx-auto min-h-screen'>
-    <h1 className='text-3xl mt-10 p-3 text-center font-serif max-w-2xl mx-auto lg:text-4xl'>{task && task.title}</h1>
-    <Link to={`/search?category=${task && task.category}`} className='self-center mt-5'>
-    <Button color='gray' pill size='xs'>{task && task.priority}</Button>
-    </Link>
-    {/* <img src={task && task.image} alt={task && task.title} className='mt-10 p-3 max-h-[600px] w-full object-cover'/> */}
-    <div className="flex justify-between p-3 border-b border-slate-500 mx-auto w-full max-w-2xl text-xs">
+  <h1 className='text-3xl mt-10 p-3 text-center font-serif max-w-2xl mx-auto lg:text-4xl'>
+    {task && task.title}
+  </h1>
+  <Link
+    to={`/search?category=${task && task.category}`}
+    className='self-center mt-5'
+  >
+    <Button color='gray' pill size='xs'>
+      {task && task.priority}
+    </Button>
+  </Link>
+  <img
+    src={task && task.image}
+    alt={task && task.title}
+    className='mt-10 p-3 max-h-[600px] w-full object-cover'
+  />
+  <div className='flex justify-between p-3 border-b border-slate-500 mx-auto w-full max-w-2xl text-xs'>
         <span>{task && new Date(task.createdAt).toLocaleDateString()}</span>
         {/* <span className='italic'>{task && (task.content.length /1000).toFixed(0)} mins read</span> */}
     </div>
     <div className='p-3 max-w-2xl mx-auto w-full task-content' dangerouslySetInnerHTML={{__html: task && task.content}}>
 
     </div>
-  </main>;
+    <div className='max-w-4xl mx-auto w-full'>
+      <CallToAction/>
+    </div>
+      <CommentSection taskId={task._id} />
+    </main>
 }
